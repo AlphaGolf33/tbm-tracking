@@ -1,0 +1,79 @@
+.CUB_Spit {
+	width: 350px !important;
+}
+
+#legend img {
+	vertical-align: bottom;
+	width: 32px;
+}
+
+#reload {
+	margin-bottom: 10px;
+}
+
+#fares {
+	margin-top: 10px;
+	clear: both;
+}
+
+.line_ico {
+	vertical-align: middle;
+	height: 24px;
+}
+
+.copyright {
+	bottom: 5px;
+	font-size: 12px;
+	position: absolute;
+	text-align: center;
+	width: 90%;
+}
+
+img.bus_icon {
+	float: left;
+}
+
+#svg_legend > svg {
+	float: left;
+	width: 40px;
+	height: 40px;
+}
+
+#svg_legend > div {
+	float: left;
+}
+
+#map {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 0;
+}
+
+#right_pannel_trigger {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	z-index: 1;
+}
+
+#container {
+	position: relative;
+}
+
+.hamburger {
+	width: 35px;
+	height: 5px;
+	background-color: #2a2a2a;
+	margin: 6px 0;
+}
+
+div[id^="OpenLayersDiv"] {
+	font-size: 40px;
+}
+
+.CUB_Spit {
+	font-size: 20px;
+}
