@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>Tram &amp; Bus - Lignes en temps réel</title>
+		<link rel="icon" href="img/favicon.ico" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link
+			rel="stylesheet"
+			href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"
+		/>
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script
+			type="text/javascript"
+			src="//data.bordeaux-metropole.fr/api/cub.xjs?key=1128BEOUVW"
+		></script>
+		<script type="text/javascript" src="js/saeiv.js"></script>
+	</head>
+	<body>
+		<div id="map"></div>
+		<a id="right_pannel_trigger" href="#right_panel"
+			><div class="hamburger"></div>
+			<div class="hamburger"></div>
+			<div class="hamburger"></div>
+		</a>
+		<div
+			id="right_panel"
+			data-role="panel"
+			data-display="overlay"
+			data-position="right"
+			data-theme="b"
+		>
+			<label for="cboLines">Lignes TBM :</label>
+			<select id="cboLines">
+				<option>Sélectionner une ligne</option>
+			</select>
+
+			<fieldset data-role="controlgroup" id="panWay" style="display: none">
+				<legend>Sens :</legend>
+				<label for="optWaySingle">Aller</label>
+				<input
+					name="optWay"
+					id="optWaySingle"
+					value="single"
+					checked="checked"
+					type="radio"
+				/>
+				<label for="optWayReturn">Retour</label>
+				<input name="optWay" id="optWayReturn" value="return" type="radio" />
+			</fieldset>
+
+			<div id="legend">
+				<div id="stats"></div>
+				<div><img src="img/saeiv_bus_ok.png" /> Véhicule à l'heure</div>
+				<div><img src="img/saeiv_bus_avance.png" /> Véhicule en avance</div>
+				<div><img src="img/saeiv_bus_retard.png" /> Véhicule en retard</div>
+				<div id="svg_legend">
+					<svg>
+						<circle
+							cx="15"
+							cy="30"
+							r="5"
+							fill="#FF1111"
+							fill-opacity="0.4"
+							stroke="#FF1111"
+							stroke-opacity="1"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-dasharray="none"
+						></circle>
+					</svg>
+					<div><br />Arrêt</div>
+				</div>
+				<div id="fares"></div>
+			</div>
+			<div class="copyright">
+				<div id="reload">
+					<img src="img/loading_very_small_white.gif" /> Rafaîchissement dans
+					<span></span>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
