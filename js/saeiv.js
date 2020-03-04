@@ -15,7 +15,6 @@ var SAEIV = {
 	wpsStopTimes: null,
 
 	// Correspondances à l'arrêt
-	wpsStopCorres: null,
 	corresData: null,
 
 	// Stats
@@ -81,15 +80,6 @@ var SAEIV = {
 
 		// Horaires à un arrêt
 		SAEIV.wpsStopTimes = new CUB.Layer.Processing(
-			"",
-			"//data.bordeaux-metropole.fr/wps?key=1128BEOUVW",
-			{
-				process: "SV_HORAI_A",
-			}
-		);
-
-		// Correspondances
-		SAEIV.wpsStopCorres = new CUB.Layer.Processing(
 			"",
 			"//data.bordeaux-metropole.fr/wps?key=1128BEOUVW",
 			{
@@ -294,45 +284,34 @@ var SAEIV = {
 	// Sélection d'un arrêt
 	onSelectStop: function(entity) {
 		SAEIV.corresData = null;
-		SAEIV.wpsStopCorres.execute(
+		SAEIV.wpsStopTimes.execute(
 			{
 				GID: entity.attributes.GID,
 			},
 			function(reponse) {
 				SAEIV.corresData = reponse.result;
-			}
-		);
-
-		// On charge les horaires de l'arrêt
-		SAEIV.wpsStopTimes.execute(
-			{
-				filter:
-					"<Filter><PropertyIsEqualTo ><PropertyName>RS_SV_ARRET_P</PropertyName><Literal>" +
-					entity.attributes.GID +
-					"</Literal></PropertyIsEqualTo></Filter>",
-				propertyname: ["HOR_REAL", "HOR_APP", "RS_SV_COURS_A", "ETAT", "TYPE"],
-			},
-			function(response) {
-				var horaires = [];
 
 				// On cherche les horaires pour notre chemin
-				$(response.result).each(function(idx, rec) {
+				var horaires = [];
+				for (var i in reponse.result) {
+					var rec = reponse.result[i];
+
 					var hor = Date.fromString(
 						rec.attributes.HOR_REAL || rec.attributes.HOR_APP
 					); // On prend le théorique si l'horaire estimée n'existe pas
 
 					if (
 						hor >= new Date().setMinutes(new Date().getMinutes() - 5) &&
-						hor <= new Date().setMinutes(new Date().getMinutes() + 30)
+						rec.attributes.RS_SV_LIGNE_A == $("#cboLines").val()
 					)
 						horaires.push(rec);
-				});
+				}
 
 				// Tri par horaires
 				horaires.sort(function(a, b) {
 					return (
-						Date.fromString(a.attributes.HOR_APP) -
-						Date.fromString(b.attributes.HOR_APP)
+						Date.fromString(a.attributes.HOR_REAL || a.attributes.HOR_APP) -
+						Date.fromString(b.attributes.HOR_REAL || b.attributes.HOR_APP)
 					);
 				});
 
@@ -340,12 +319,6 @@ var SAEIV = {
 				var res = "";
 				var cnt = 0;
 				for (var i in horaires) {
-					if (
-						horaires[i].attributes.ETAT != "NON_REALISE" &&
-						horaires[i].attributes.ETAT != "NON_RENSEIGNE"
-					)
-						continue;
-
 					var hor;
 					var hor_theo = false;
 					if (horaires[i].attributes.HOR_REAL)
@@ -399,15 +372,16 @@ var SAEIV = {
 					},
 					entity.geometry().toPosition()
 				);
-
-				// Chargement des correspondances
-				var fn = function() {
-					if (SAEIV.corresData) SAEIV.onCorresLoad();
-					else setTimeout(fn, 500);
-				};
-				fn();
 			}
 		);
+
+		// Chargement des correspondances
+		var fn = function() {
+			if (SAEIV.corresData) {
+				SAEIV.onCorresLoad();
+			} else setTimeout(fn, 500);
+		};
+		fn();
 	},
 
 	onCorresLoad: function() {
